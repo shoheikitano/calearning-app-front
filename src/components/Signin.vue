@@ -5,10 +5,10 @@
     </template>
     <v-card>
       <v-card-title>
-        <span class="headline">ログイン</span>
+        <h1 class="logo">Sign in</h1>
         <v-spacer></v-spacer>
         <v-btn icon @click="dialog = false">
-          <v-icon>close</v-icon>
+          <v-icon>×</v-icon>
         </v-btn>
       </v-card-title>
       <v-card-text>
@@ -42,3 +42,12 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  .logo {
+    color: #4ECC82;
+    font-family: "SignPainter";
+    text-transform: capitalize;
+    font-size: xx-large;
+  }
+</style>

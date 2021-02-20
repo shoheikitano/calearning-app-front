@@ -13,6 +13,7 @@
     <span class="font-weight-light calearning-logo">Ranking</span>
     <v-spacer></v-spacer>
     <Signin />
+    <v-btn to="/signup" outlined color="#4ECC82" >Sign up</v-btn>
     <v-spacer></v-spacer>
     <v-icon color="#4ECC82">mdi-magnify</v-icon>
     <v-icon color="#4ECC82">mdi-bell</v-icon>
