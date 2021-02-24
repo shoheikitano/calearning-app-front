@@ -1,19 +1,24 @@
 <template>
   <v-app>
-    <Header/>
-    <v-main class="background">
+    <Header v-if="false"/>
+    <Sidebar/>
+
+    <v-content class="background">
       <router-view />
-    </v-main>
+    </v-content>
   </v-app>
 </template>
 
 <script>
 import Header from "./components/Header"
+import Sidebar from "./components/Sidebar"
+
 export default {
   name: 'App',
 
   components: {
-    Header
+    Header,
+    Sidebar,
   },
 
   data: () => ({

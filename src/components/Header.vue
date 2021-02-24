@@ -1,8 +1,10 @@
 <template>
   <v-app-bar app>
-    <v-toolbar-title class="headline text-uppercase">
-      <span class="font-weight-light calearning-logo">Calaerning</span>
-    </v-toolbar-title>
+    <router-link to="/" style="text-decoration: none; color: inherit;">
+      <v-toolbar-title class="headline text-uppercase">
+        <span class="font-weight-light calearning-logo">Calaerning</span>
+      </v-toolbar-title>
+    </router-link>
     <v-spacer></v-spacer>
     <span class="font-weight-light calearning-logo">Detail</span>
     <v-spacer></v-spacer>
