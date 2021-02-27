@@ -3,6 +3,9 @@ import Router from 'vue-router';
 import Home from '../components/Home';
 import Signup from '../components/Signup';
 import Calender from '../components/Calender';
+import Learns from '../components/Learns';
+import Ranking from '../components/Ranking';
+import Profile from '../components/Profile';
 
 Vue.use(Router);
 
@@ -28,7 +31,21 @@ export default new Router({
       path: '/calender',
       name: 'calender',
       component: Calender
+    },
+    {
+      path: '/learns',
+      name: 'learns',
+      component: Learns
+    },
+    {
+      path: '/ranking',
+      name: 'ranking',
+      component: Ranking
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile
     }
-
   ]
 });

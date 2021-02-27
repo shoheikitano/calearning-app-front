@@ -6,9 +6,10 @@
     >
       Calearning
     </div>
-    <h2>
-      {{$refs.calendar.title}}
-    </h2>
+    <!-- <h2>
+      {{ $refs.calendar.title }}
+    </h2> -->
+    <Postlearn />
     <v-card outlined shaped>
         <v-sheet
           height="54"
@@ -77,11 +78,11 @@
 </template>
 
 <script>
-  
+  import Postlearn from "./Postlearn"
   export default {
     name: 'Calender',
     components: {
-      
+      Postlearn,
     },
     data: () => ({
       type: 'month',

@@ -31,31 +31,33 @@
             <v-list-item-icon>
               <v-icon class="logo">mdi-folder</v-icon>
             </v-list-item-icon>
-            <v-list-item-title class="logo">Calearning</v-list-item-title>
+            <v-list-item-title>
+              <router-link to="/calender" class="logo">Calearning</router-link>
+            </v-list-item-title>
           </v-list-item>
           <v-list-item link>
             <v-list-item-icon>
               <v-icon class="logo">mdi-folder</v-icon>
             </v-list-item-icon>
-            <v-list-item-title class="logo">Learns</v-list-item-title>
+            <v-list-item-title>
+              <router-link to="/learns" class="logo">Learns</router-link>
+            </v-list-item-title>
           </v-list-item>
           <v-list-item link>
             <v-list-item-icon>
               <v-icon class="logo">mdi-account-multiple</v-icon>
             </v-list-item-icon>
-            <v-list-item-title class="logo">Ranking</v-list-item-title>
+            <v-list-item-title>
+              <router-link to="/ranking" class="logo">Ranking</router-link>
+            </v-list-item-title>
           </v-list-item>
           <v-list-item link>
             <v-list-item-icon>
               <v-icon class="logo">mdi-star</v-icon>
             </v-list-item-icon>
-            <v-list-item-title class="logo">Profile</v-list-item-title>
-          </v-list-item>
-          <v-list-item link>
-            <v-list-item-icon>
-              <v-icon class="logo">mdi-star</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title class="logo">Superserch</v-list-item-title>
+            <v-list-item-title>
+              <router-link to="/profile" class="logo">Profile</router-link>
+            </v-list-item-title>
           </v-list-item>
           <v-list-item link>
             <v-list-item-icon>
@@ -96,6 +98,5 @@
     color: #4ECC82;
     font-family: "SignPainter";
     text-transform: capitalize;
-    font-size: xx-large;
   }
 </style>

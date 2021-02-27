@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Header v-if="false"/>
+    <Header />
     <Sidebar/>
 
     <v-content class="background">

@@ -24,7 +24,6 @@
           <br>
           <h2>カレンダーを使って、</h2>
           <h2>学んだ事を蓄積していこう！！！</h2>
-          <router-link to="/signup">Go to list</router-link>
           <v-btn to="/signup" outlined color="#4ECC82" >Sign up</v-btn>
         </div>
       </v-col>
