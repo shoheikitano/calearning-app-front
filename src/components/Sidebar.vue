@@ -63,13 +63,9 @@
             <v-list-item-icon>
               <v-icon class="logo">mdi-star</v-icon>
             </v-list-item-icon>
-            <v-list-item-title class="logo">Remainder</v-list-item-title>
-          </v-list-item>
-          <v-list-item link>
-            <v-list-item-icon>
-              <v-icon class="logo">mdi-star</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title class="logo">Friends</v-list-item-title>
+            <v-list-item-title>
+              <router-link to="/friends" class="logo">Friends</router-link>
+            </v-list-item-title>
           </v-list-item>
         </v-list>
         <template v-slot:append>

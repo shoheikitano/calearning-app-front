@@ -226,6 +226,7 @@ const gradients = [
   ]
 import Signin from "./Signin"
 export default {
+  name: 'Profile',
   components: {
     Signin,
   },
