@@ -38,8 +38,8 @@
       <v-container fluid>
         <v-row dense>
           <v-col
-            v-for="card in cards"
-            :key="card.title"
+            v-for="card in aaaa"
+            :key="card.id"
             :cols="4"
           >
             <v-card
@@ -53,13 +53,13 @@
                   large
                   left
                 >
-                  {{ card.icon }}
+                  {{ card.name }}
                 </v-icon>
-                <span class="title font-weight-light">{{ card.title }}</span>
+                <span class="title font-weight-light">{{ card.name }}</span>
               </v-card-title>
 
               <v-card-text class="headline font-weight-bold">
-                {{ card.content }}
+                {{ card.name }}
               </v-card-text>
 
               <v-card-actions>
@@ -73,7 +73,7 @@
                   </v-list-item-avatar>
 
                   <v-list-item-content>
-                    <v-list-item-title>{{ card.username }}</v-list-item-title>
+                    <v-list-item-title>{{ card.name }}</v-list-item-title>
                   </v-list-item-content>
 
                   <v-row
@@ -83,12 +83,12 @@
                     <v-icon class="mr-1">
                       mdi-heart
                     </v-icon>
-                    <span class="subheading mr-2">{{ card.like }}</span>
+                    <span class="subheading mr-2">{{ card.name }}</span>
                     <span class="mr-1">·</span>
                     <v-icon class="mr-1">
                       mdi-share-variant
                     </v-icon>
-                    <span class="subheading">{{ card.share }}</span>
+                    <span class="subheading">{{ card.name }}</span>
                   </v-row>
                 </v-list-item>
               </v-card-actions>
@@ -105,15 +105,7 @@
   export default {
     name: 'Learns',
     data: () => ({
-      cards: [
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-      ],
+
       password: 'Password',
       show: false,
       message: 'Hey!',
@@ -129,6 +121,7 @@
         'mdi-emoticon-sad',
         'mdi-emoticon-tongue',
       ],
+      aaaa: [],
     }),
     computed: {
       icon () {
@@ -155,7 +148,20 @@
           ? this.iconIndex = 0
           : this.iconIndex++
       },
+      async getHobbies() {
+        let response = await this.axios.get('http://localhost:8888/api/categories')
+        // let json = await response.json()
+        // let hobs = json.hobbies
+        // let hobbies = []
+        // for (const i of hobs) {
+        //   hobbies.push({"name": i.name, "id": i.id})
+        // }
+        this.aaaa = response.data
+      },
     },
+    mounted() {
+      this.getHobbies()
+    }
   }
 </script>
 
