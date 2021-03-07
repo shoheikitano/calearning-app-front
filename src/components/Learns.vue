@@ -23,6 +23,10 @@
         </v-row>
       </v-container>
     </v-form>
+    <input type="text" v-model="bbbb" />
+    <input type="text" v-model="cccc" />
+    <input type="text" v-model="dddd" />
+    <button @click="addCategory">test</button>
     <v-tabs
       color="deep-purple accent-4"
       right
@@ -121,7 +125,10 @@
         'mdi-emoticon-sad',
         'mdi-emoticon-tongue',
       ],
-      aaaa: [],
+      aaaa: '',
+      bbbb: '',
+      cccc: '',
+      dddd: '',
     }),
     computed: {
       icon () {
@@ -157,6 +164,20 @@
         //   hobbies.push({"name": i.name, "id": i.id})
         // }
         this.aaaa = response.data
+      },
+      async addCategory() {
+        let result = await this.axios.post('http://localhost:8888/api/categories/1', {
+          name: this.bbbb,
+          thumbnail: this.cccc,
+          sort: this.dddd,
+        })
+        // let json = await response.json()
+        // let hobs = json.hobbies
+        // let hobbies = []
+        // for (const i of hobs) {
+        //   hobbies.push({"name": i.name, "id": i.id})
+        // }
+        console.log(result);
       },
     },
     mounted() {
