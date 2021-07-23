@@ -26,7 +26,8 @@
     <input type="text" v-model="bbbb" />
     <input type="text" v-model="cccc" />
     <input type="text" v-model="dddd" />
-    <button @click="addCategory">test</button>
+    <button @click="register">test</button>
+    {{appNumber}}
     <v-tabs
       color="deep-purple accent-4"
       right
@@ -134,6 +135,9 @@
       icon () {
         return this.icons[this.iconIndex]
       },
+      appNumber() {
+        return this.$store.state.user;
+      },
     },
 
     methods: {
@@ -178,6 +182,29 @@
         //   hobbies.push({"name": i.name, "id": i.id})
         // }
         console.log(result);
+      },
+      async register () {
+        // authストアのresigterアクションを呼び出す
+        await this.$store.dispatch('register', {
+          name: this.bbbb,
+          thumbnail: this.cccc,
+          sort: this.dddd,
+        })
+
+        // トップページに移動する
+        this.$router.push('/')
+      },
+      async login () {
+        // authストアのloginアクションを呼び出す
+        await this.$store.dispatch('login', this.loginForm)
+
+        // トップページに移動する
+        this.$router.push('/')
+      },
+      async logout () {
+        await this.$store.dispatch('logout')
+
+        this.$router.push('/')
       },
     },
     mounted() {
