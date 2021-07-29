@@ -175,12 +175,7 @@
           thumbnail: this.cccc,
           sort: this.dddd,
         })
-        // let json = await response.json()
-        // let hobs = json.hobbies
-        // let hobbies = []
-        // for (const i of hobs) {
-        //   hobbies.push({"name": i.name, "id": i.id})
-        // }
+        
         console.log(result);
       },
       async register () {
