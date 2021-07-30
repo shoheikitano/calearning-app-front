@@ -5,7 +5,7 @@
     </template>
     <v-card>
       <v-card-title>
-        <h1 class="logo">Sign in</h1>
+        <h1 class="logo">Postlearn</h1>
         <v-spacer></v-spacer>
         <v-btn icon @click="dialog = false">
           <v-icon>×</v-icon>

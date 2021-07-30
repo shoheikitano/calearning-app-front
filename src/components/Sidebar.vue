@@ -70,7 +70,7 @@
         </v-list>
         <template v-slot:append>
         <div class="pa-2">
-          <v-btn block>
+          <v-btn block @click="logout">
             Logout
           </v-btn>
         </div>
@@ -80,13 +80,23 @@
 
 <script>
   export default {
-    name: 'Sidebar',
+  name: 'Sidebar',
 
-    components: {
+  components: {
     
+  },
+  data: () => ({
+  
+  }),
+  methods: {
+    async logout () {
+      // authストアのresigterアクションを呼び出す
+      await this.$store.dispatch('logout')
+      // トップページに移動する
+      this.$router.push('/')
     },
-
-  }
+  },
+}
 </script>
 
 <style scoped>

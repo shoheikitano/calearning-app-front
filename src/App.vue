@@ -1,8 +1,7 @@
 <template>
   <v-app>
     <Header />
-    <Sidebar/>
-
+    <Sidebar v-if="this.$store.state.user"/>
     <v-content class="background">
       <router-view />
     </v-content>
