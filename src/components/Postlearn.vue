@@ -27,6 +27,9 @@
               <v-text-field label="言語" v-model="language_id" required></v-text-field>
             </v-flex>
             <v-flex xs12>
+              <v-text-field label="色" v-model="color" required></v-text-field>
+            </v-flex>
+            <v-flex xs12>
               <datetime v-model="learn_datetime_start" type="datetime" format="yyyy-MM-dd HH:mm:ss" input-id="startDate">
                 <label slot="before" for="startDate">開始時間</label>
               </datetime>
@@ -60,6 +63,7 @@ export default {
     language_id: '',
     learn_datetime_start: '',
     learn_datetime_end: '',
+    color: '',
     dialog: false,
   }),
   methods: {
@@ -72,10 +76,14 @@ export default {
         language_id: this.language_id,
         learn_datetime_start: this.learn_datetime_start,
         learn_datetime_end: this.learn_datetime_end,
+        color: this.color,
       })
         
       this.dialog = false
-      this.$router.push('/calender')
+      this.reload()
+    },
+    reload() {
+        this.$router.go({path: this.$router.currentRoute.path, force: true});
     },
   },
 };
