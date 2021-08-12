@@ -14,9 +14,9 @@
           <v-list-item link>
             <v-list-item-content>
               <v-list-item-title class="title">
-                Shohei Kitano
+                {{$store.state.user.user_name}}
               </v-list-item-title>
-              <v-list-item-subtitle>sample@gmail.com</v-list-item-subtitle>
+              <v-list-item-subtitle>{{$store.state.user.mail_address}}</v-list-item-subtitle>
             </v-list-item-content>
           </v-list-item>
         </v-list>

@@ -6,9 +6,9 @@
     >
       Calearning
     </div>
-    <!-- <h2>
-      {{ $refs.calendar.title }}
-    </h2> -->
+    <h2>
+      {{ title }}
+    </h2>
     <Postlearn />
     <v-card outlined shaped>
         <v-sheet
@@ -70,6 +70,7 @@
             :event-overlap-mode="mode"
             :event-overlap-threshold="30"
             :event-color="getEventColor"
+            locale="ja-jp"
             @change="getEvents"
           ></v-calendar>
         </v-sheet>
@@ -79,6 +80,7 @@
 
 <script>
   import Postlearn from "./Postlearn"
+  import moment from 'moment'
   export default {
     name: 'Calender',
     components: {
@@ -86,6 +88,7 @@
     },
     data: () => ({
       type: 'month',
+      value: moment().format('yyyy-MM-DD'),  // 現在日時
       types: ['month', 'week', 'day', '4day'],
       mode: 'stack',
       modes: ['stack', 'column'],
@@ -96,7 +99,6 @@
         { text: 'Mon - Fri', value: [1, 2, 3, 4, 5] },
         { text: 'Mon, Wed, Fri', value: [1, 3, 5] },
       ],
-      value: '',
       events: [],
       colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
       names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
@@ -112,7 +114,11 @@
         return event.color
       },
     },
-  
+    computed: {
+      title() {
+        return moment(this.value).format('yyyy年 M月');  // 表示用文字列を返す
+      }
+    },
   }
 </script>
 

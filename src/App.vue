@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <Header />
+    <Header v-if="this.$store.state.user == null"/>
     <Sidebar v-if="this.$store.state.user"/>
     <v-content class="background">
       <router-view />

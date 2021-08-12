@@ -9,8 +9,8 @@
                 <v-avatar class="mt-n7" size="60" elevation="10">
                   <img src="https://1.bp.blogspot.com/-jlZlCg-8FAM/Xub_u8HTD1I/AAAAAAABZis/ZhUI05AZBEQpVinedZ6Xy-eIucmNuY2SQCNcBGAsYHQ/s1600/pose_pien_uruuru_man.png" />
                 </v-avatar>
-                <v-card-title class="layout justify-center">Bes Wilis</v-card-title>
-                <v-card-subtitle class="layout justify-center">24 year, California</v-card-subtitle>
+                <v-card-title class="layout justify-center">{{profile.user_name}}</v-card-title>
+                <v-card-subtitle class="layout justify-center">{{profile.birthday}}</v-card-subtitle>
                 <Signin />
                 <v-list>
                   <v-list-item>
@@ -18,8 +18,8 @@
                     <v-list-item-title class="cyan--text text--darken-1">Likes</v-list-item-title>
                   </v-list-item>
                   <v-list-item class="mt-n5">
-                    <v-list-item-subtitle>170</v-list-item-subtitle>
-                    <v-list-item-subtitle>60</v-list-item-subtitle>
+                    <v-list-item-subtitle>{{learns_count}}</v-list-item-subtitle>
+                    <v-list-item-subtitle>{{likes_count}}</v-list-item-subtitle>
                   </v-list-item>
                 </v-list>
               </v-card>
@@ -28,7 +28,7 @@
               <v-list color="transparent" class="text-center">
                 <v-list-item>
                   <v-list-item-title class="cyan--text text--darken-1">Friends</v-list-item-title>
-                  <v-list-item-subtitle>26 Aug 2019</v-list-item-subtitle>
+                  <v-list-item-subtitle>{{friends_count}}</v-list-item-subtitle>
                 </v-list-item>
               </v-list>
             </v-flex>
@@ -231,7 +231,7 @@ export default {
     Signin,
   },
   data: () => ({
-     width: 2,
+    width: 2,
       radius: 10,
       padding: 8,
       lineCap: 'round',
@@ -242,8 +242,12 @@ export default {
       fill: false,
       type: 'trend',
       autoLineWidth: false,
-       arrayEvents: null,
+      arrayEvents: null,
       date2: new Date().toISOString().substr(0, 10),
+      profile: null,
+      learns_count: null,
+      likes_count: null,
+      friends_count: null,
       items: [
         {
           avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
@@ -275,7 +279,7 @@ export default {
   computed: {
     theme() {
       return this.$vuetify.theme.dark ? "dark" : "light";
-    }
+    },
   },
   mounted () {
       this.arrayEvents = [...Array(6)].map(() => {
@@ -283,7 +287,11 @@ export default {
         const d = new Date()
         d.setDate(day)
         return d.toISOString().substr(0, 10)
-      })
+      }),
+      this.getProfile()
+      this.getLearnsCount()
+      this.getLikesCount()
+      this.getFriendsCount()
     },
     methods: {
       functionEvents (date) {
@@ -291,6 +299,38 @@ export default {
         if ([12, 17, 28].includes(parseInt(day, 10))) return true
         if ([1, 19, 22].includes(parseInt(day, 10))) return ['red', '#00f']
         return false
+      },
+      async getProfile() {
+        let params = {}
+        params.user_id = this.$store.state.user.user_id
+        let response = await this.axios.get('http://localhost:8888/api/getProfile',{
+          params
+        })
+        this.profile = response.data
+      },
+      async getLearnsCount() {
+        let params = {}
+        params.user_id = this.$store.state.user.user_id
+        let response = await this.axios.get('http://localhost:8888/api/getLearnsCount',{
+          params
+        })
+        this.learns_count = response.data.learns_count
+      },
+      async getLikesCount() {
+        let params = {}
+        params.user_id = this.$store.state.user.user_id
+        let response = await this.axios.get('http://localhost:8888/api/getLikesCount',{
+          params
+        })
+        this.likes_count = response.data.likes_count
+      },
+      async getFriendsCount() {
+        let params = {}
+        params.user_id = this.$store.state.user.user_id
+        let response = await this.axios.get('http://localhost:8888/api/getFriendsCount',{
+          params
+        })
+        this.friends_count = response.data.friends_count
       },
     },
 };

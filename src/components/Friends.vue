@@ -27,18 +27,19 @@
       color="deep-purple accent-4"
       right
     >
-      <v-tab>Follow</v-tab>
-      <v-tab>Follower</v-tab>
+      <v-tab @click="getUsers">Users</v-tab>
+      <v-tab @click="getFollow($store.state.user.user_id)">Follow</v-tab>
+      <v-tab @click="getFollower($store.state.user.user_id)">Follower</v-tab>
 
       <v-tab-item
-        v-for="n in 2"
+        v-for="n in 3"
         :key="n"
       >
       <v-container fluid>
         <v-row dense>
           <v-col
             v-for="card in cards"
-            :key="card.title"
+            :key="card.user_id"
             :cols="4"
           >
             <v-card
@@ -75,10 +76,12 @@
                     >
                       <v-list-item-content>
                         <v-list-item-title class="title">
-                          Marcus Obrien
+                          {{card.user_name}}
                         </v-list-item-title>
-                        <v-list-item-subtitle>Network Engineer</v-list-item-subtitle>
+                        <v-list-item-subtitle>{{card.user_name}}</v-list-item-subtitle>
                       </v-list-item-content>
+                      <v-btn v-if="card.user_id_follow != $store.state.user.user_id" small color="secondary" dark @click="follow(card.user_id)">follow</v-btn>
+                      <v-btn v-if="card.user_id_follow == $store.state.user.user_id" small color="blue-grey" dark @click="refollow(card.user_id)">refollow</v-btn>
                     </v-list-item>
                   </v-col>
                 </v-row>
@@ -96,18 +99,10 @@
   export default {
     name: 'Friends',
     data: () => ({
-      cards: [
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-      ],
+      cards: null,
       password: 'Password',
       show: false,
-      message: 'Hey!',
+      message: '',
       marker: true,
       iconIndex: 0,
       icons: [
@@ -146,7 +141,61 @@
           ? this.iconIndex = 0
           : this.iconIndex++
       },
+      async getFollow() {
+        let params = {}
+        params.user_id = this.$store.state.user.user_id
+        params.message = this.message
+        let response = await this.axios.get('http://localhost:8888/api/getFollow',{
+          params
+        })
+
+        this.cards = response.data
+      },
+      async getFollower() {
+        let params = {}
+        params.user_id = this.$store.state.user.user_id
+        params.message = this.message
+        let response = await this.axios.get('http://localhost:8888/api/getFollower',{
+          params
+        })
+
+        this.cards = response.data
+      },
+      async getUsers() {
+        let params = {}
+        params.user_id = this.$store.state.user.user_id
+        params.message = this.message
+        let response = await this.axios.get('http://localhost:8888/api/getUsers',{
+          params
+        })
+
+        this.cards = response.data
+      },
+      async follow(user_id) {
+        await this.axios.post('http://localhost:8888/api/follow', {
+          user_id_follow: this.$store.state.user.user_id,
+          user_id: user_id,
+        })
+        
+        this.dialog = false
+        this.reload()
+      },
+      async refollow(user_id) {
+        await this.axios.post('http://localhost:8888/api/refollow', {
+          user_id_follow: this.$store.state.user.user_id,
+          user_id: user_id,
+        })
+        
+        this.dialog = false
+        this.reload()
+      },
+      reload() {
+        this.$router.go({path: this.$router.currentRoute.path, force: true});
+      },
     },
+    mounted() {
+      this.getUsers()
+    }
   }
 </script>
 
