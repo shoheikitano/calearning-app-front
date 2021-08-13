@@ -26,9 +26,9 @@
       color="deep-purple accent-4"
       right
     >
-      <v-tab>MINE</v-tab>
-      <v-tab>Friends</v-tab>
-      <v-tab>All</v-tab>
+      <v-tab @click="getLearns">MINE</v-tab>
+      <v-tab @click="getFollowLearns">Friends</v-tab>
+      <v-tab @click="getAllLearns">All</v-tab>
 
       <v-tab-item
         v-for="n in 3"
@@ -71,22 +71,55 @@
                   </v-list-item-avatar>
 
                   <v-list-item-content>
-                    <v-list-item-title>{{ card.user_id }}</v-list-item-title>
+                    <v-list-item-title>{{ card.user_name }}</v-list-item-title>
                   </v-list-item-content>
 
                   <v-row
                     align="center"
                     justify="end"
                   >
-                    <v-icon class="mr-1">
-                      mdi-heart
-                    </v-icon>
-                    <span class="subheading mr-2">{{ card.name }}</span>
-                    <span class="mr-1">·</span>
-                    <v-icon class="mr-1">
-                      mdi-share-variant
-                    </v-icon>
-                    <span class="subheading">{{ card.name }}</span>
+                    <v-btn
+                      icon
+                      color="pink"
+                      v-if="card.like_id != null"
+                    >
+                      <v-icon>mdi-heart</v-icon>
+                    </v-btn>
+                    <v-btn
+                      icon
+                      color="blue-grey"
+                      v-if="card.like_id == null"
+                    >
+                      <v-icon>mdi-heart</v-icon>
+                    </v-btn>
+                    <v-btn
+                      icon
+                      color="indigo"
+                      v-if="card.retweet_id != null"
+                    >
+                      <v-icon>mdi-share-variant</v-icon>
+                    </v-btn>
+                    <v-btn
+                      icon
+                      color="blue-grey"
+                      v-if="card.retweet_id == null"
+                    >
+                      <v-icon>mdi-share-variant</v-icon>
+                    </v-btn>
+                    <v-btn
+                      icon
+                      color="primary"
+                      v-if="card.comment_id != null"
+                    >
+                      <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
+                    <v-btn
+                      icon
+                      color="blue-grey"
+                      v-if="card.comment_id == null"
+                    >
+                      <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
                   </v-row>
                 </v-list-item>
               </v-card-actions>
@@ -146,6 +179,28 @@
         params.user_id = this.$store.state.user.user_id
         params.message = this.message
         let response = await this.axios.get('http://localhost:8888/api/learns',{
+          params
+        })
+
+        this.learns = response.data
+      },
+
+      async getFollowLearns() {
+        let params = {}
+        params.user_id = this.$store.state.user.user_id
+        params.message = this.message
+        let response = await this.axios.get('http://localhost:8888/api/followlearns',{
+          params
+        })
+
+        this.learns = response.data
+      },
+
+      async getAllLearns() {
+        let params = {}
+        params.user_id = this.$store.state.user.user_id
+        params.message = this.message
+        let response = await this.axios.get('http://localhost:8888/api/alllearns',{
           params
         })
 

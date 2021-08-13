@@ -115,6 +115,7 @@
         'mdi-emoticon-sad',
         'mdi-emoticon-tongue',
       ],
+      tab_f: 1
     }),
     computed: {
       icon () {
@@ -150,6 +151,8 @@
         })
 
         this.cards = response.data
+
+        this.tab_f == 2
       },
       async getFollower() {
         let params = {}
@@ -160,6 +163,8 @@
         })
 
         this.cards = response.data
+
+        this.tab_f == 3
       },
       async getUsers() {
         let params = {}
@@ -170,24 +175,39 @@
         })
 
         this.cards = response.data
+
+        this.tab_f == 1
       },
       async follow(user_id) {
         await this.axios.post('http://localhost:8888/api/follow', {
           user_id_follow: this.$store.state.user.user_id,
           user_id: user_id,
         })
+        if (this.tab_f == 1) {
+          this.getUsers()
+        } else if (this.tab_f == 2) {
+          this.getFollow()
+        } else if (this.tab_f == 3) {
+          this.getFollower()
+        }
         
-        this.dialog = false
-        this.reload()
+        //this.dialog = false
+        //this.reload()
       },
       async refollow(user_id) {
         await this.axios.post('http://localhost:8888/api/refollow', {
           user_id_follow: this.$store.state.user.user_id,
           user_id: user_id,
         })
-        
-        this.dialog = false
-        this.reload()
+        if (this.tab_f == 1) {
+          this.getUsers()
+        } else if (this.tab_f == 2) {
+          this.getFollow()
+        } else if (this.tab_f == 3) {
+          this.getFollower()
+        }
+        //this.dialog = false
+        //this.reload()
       },
       reload() {
         this.$router.go({path: this.$router.currentRoute.path, force: true});
