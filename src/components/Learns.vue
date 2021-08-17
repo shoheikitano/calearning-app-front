@@ -82,6 +82,7 @@
                       icon
                       color="pink"
                       v-if="card.like_id != null"
+                      @click="reLike(card.learn_id)"
                     >
                       <v-icon>mdi-heart</v-icon>
                     </v-btn>
@@ -89,6 +90,7 @@
                       icon
                       color="blue-grey"
                       v-if="card.like_id == null"
+                      @click="like(card.learn_id)"
                     >
                       <v-icon>mdi-heart</v-icon>
                     </v-btn>
@@ -155,6 +157,7 @@
       bbbb: '',
       cccc: '',
       dddd: '',
+      tab_f: 1
     }),
     computed: {
       icon () {
@@ -183,6 +186,8 @@
         })
 
         this.learns = response.data
+
+        this.tab_f == 1
       },
 
       async getFollowLearns() {
@@ -194,6 +199,8 @@
         })
 
         this.learns = response.data
+
+        this.tab_f == 2
       },
 
       async getAllLearns() {
@@ -205,8 +212,40 @@
         })
 
         this.learns = response.data
-      },
 
+        this.tab_f == 3
+      },
+      async like(learn_id) {
+        await this.axios.post('http://localhost:8888/api/like', {
+          user_id: this.$store.state.user.user_id,
+          learn_id: learn_id,
+        })
+        if (this.tab_f == 1) {
+          this.getLearns()
+        } else if (this.tab_f == 2) {
+          this.getFollowLearns()
+        } else if (this.tab_f == 3) {
+          this.getAllLearns()
+        }
+        
+        //this.dialog = false
+        //this.reload()
+      },
+      async reLike(learn_id) {
+        await this.axios.post('http://localhost:8888/api/relike', {
+          user_id: this.$store.state.user.user_id,
+          learn_id: learn_id,
+        })
+        if (this.tab_f == 1) {
+          this.getLearns()
+        } else if (this.tab_f == 2) {
+          this.getFollowLearns()
+        } else if (this.tab_f == 3) {
+          this.getAllLearns()
+        }
+        //this.dialog = false
+        //this.reload()
+      },
     },
     mounted() {
       this.getLearns()

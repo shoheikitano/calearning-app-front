@@ -6,6 +6,7 @@ import Calender from '../components/Calender';
 import Learns from '../components/Learns';
 import Ranking from '../components/Ranking';
 import Profile from '../components/Profile';
+import FollowProfile from '../components/FollowProfile';
 import Friends from '../components/Friends';
 
 Vue.use(Router);
@@ -47,6 +48,12 @@ export default new Router({
       path: '/profile',
       name: 'profile',
       component: Profile
+    },
+    {
+      path: '/followprofile',
+      name: 'followprofile',
+      component: FollowProfile,
+      props: true
     },
     {
       path: '/friends',

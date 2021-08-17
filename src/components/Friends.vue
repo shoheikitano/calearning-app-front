@@ -76,7 +76,7 @@
                     >
                       <v-list-item-content>
                         <v-list-item-title class="title">
-                          {{card.user_name}}
+                          <FollowProfile :friends_user_id = card.user_id :friends_user_name = card.user_name />
                         </v-list-item-title>
                         <v-list-item-subtitle>{{card.user_name}}</v-list-item-subtitle>
                       </v-list-item-content>
@@ -96,8 +96,12 @@
 </template>
 
 <script>
+  import FollowProfile from "./FollowProfile"
   export default {
     name: 'Friends',
+    components: {
+      FollowProfile,
+    },
     data: () => ({
       cards: null,
       password: 'Password',
