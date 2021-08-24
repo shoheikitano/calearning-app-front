@@ -10,7 +10,7 @@
       {{ title }}
     </h2>
     <Postlearn />
-    <Showlearn :dialog = this.dialog :event = this.event />
+    <Showlearn @my-click='dialog1 = $event' :dialog1 = this.dialog1 :event = this.event :title = this.title :detail = this.detail :category_id = this.category_id :language_id = this.language_id :color = this.color />
     <v-card outlined shaped>
         <v-sheet
           height="54"
@@ -97,7 +97,7 @@
       mode: 'stack',
       modes: ['stack', 'column'],
       weekday: [0, 1, 2, 3, 4, 5, 6],
-      dialog: false,
+      dialog1: false,
       weekdays: [
         { text: 'Sun - Sat', value: [0, 1, 2, 3, 4, 5, 6] },
         { text: 'Mon - Sun', value: [1, 2, 3, 4, 5, 6, 0] },
@@ -109,6 +109,11 @@
       event: '',
       colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
       names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
+      title: '',
+      detail: '',
+      category_id: '',
+      language_id: '',
+      color: '',
     }),
     methods: {
       async getEvents () {
@@ -121,7 +126,7 @@
         return event.color
       },
       showEvent({ event }) {
-        this.dialog = true
+        this.dialog1 = true
         this.learn_id = event.learn_id
         this.getLearn()
       },
@@ -130,6 +135,11 @@
         params.learn_id = this.learn_id
         let event = await this.axios.get('http://localhost:8888/api/getLearn',{ params })
         this.event = event.data
+        this.title = event.data.title
+        this.detail = event.data.detail
+        this.category_id = event.data.category_id
+        this.language_id = event.data.language_id
+        this.color = event.data.color
       },
     },
     computed: {

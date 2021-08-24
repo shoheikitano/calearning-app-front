@@ -1,6 +1,8 @@
 <template>
   <v-container>
     <h1 class="logo text-center">Learns</h1>
+    <Showlearn @my-click='dialog1 = $event' :dialog1 = this.dialog1 :event = this.event :title = this.title :detail = this.detail :category_id = this.category_id :language_id = this.language_id :color = this.color />
+    <Comment @my-click='dialog2 = $event' :dialog2 = this.dialog2 :event = this.event :comment_content = this.comment_content />
     <v-form>
       <v-container>
         <v-row>
@@ -51,6 +53,7 @@
                 <v-icon
                   large
                   left
+                  @click="showEvent(card)"
                 >
                   {{ card.title }}
                 </v-icon>
@@ -96,22 +99,9 @@
                     </v-btn>
                     <v-btn
                       icon
-                      color="indigo"
-                      v-if="card.retweet_id != null"
-                    >
-                      <v-icon>mdi-share-variant</v-icon>
-                    </v-btn>
-                    <v-btn
-                      icon
-                      color="blue-grey"
-                      v-if="card.retweet_id == null"
-                    >
-                      <v-icon>mdi-share-variant</v-icon>
-                    </v-btn>
-                    <v-btn
-                      icon
                       color="primary"
                       v-if="card.comment_id != null"
+                      @click="showComment(card)"
                     >
                       <v-icon>mdi-pencil</v-icon>
                     </v-btn>
@@ -119,6 +109,7 @@
                       icon
                       color="blue-grey"
                       v-if="card.comment_id == null"
+                      @click="showComment(card)"
                     >
                       <v-icon>mdi-pencil</v-icon>
                     </v-btn>
@@ -135,14 +126,23 @@
 </template>
 
 <script>
+  import Showlearn from "./Showlearn"
+  import Comment from "./Comment"
   export default {
     name: 'Learns',
+    components: {
+      Showlearn,
+      Comment,
+    },
     data: () => ({
       password: 'Password',
       show: false,
       message: '',
+      event: '',
       marker: true,
       iconIndex: 0,
+      dialog1: false,
+      dialog2: false,
       icons: [
         'mdi-emoticon',
         'mdi-emoticon-cool',
@@ -154,10 +154,13 @@
         'mdi-emoticon-tongue',
       ],
       learns: '',
-      bbbb: '',
-      cccc: '',
-      dddd: '',
-      tab_f: 1
+      title: '',
+      detail: '',
+      category_id: '',
+      language_id: '',
+      color: '',
+      comment_content: '',
+      tab_f: 1,
     }),
     computed: {
       icon () {
@@ -177,6 +180,27 @@
           ? this.iconIndex = 0
           : this.iconIndex++
       },
+      showEvent(card) {
+        this.dialog1 = true
+        this.learn_id = card.learn_id
+        this.getLearn()
+      },
+      showComment(card) {
+        this.dialog2 = true
+        this.learn_id = card.learn_id
+        this.comment_content = card.comment_content
+      },
+      async getLearn () {
+        let params = {}
+        params.learn_id = this.learn_id
+        let event = await this.axios.get('http://localhost:8888/api/getLearn',{ params })
+        this.event = event.data
+        this.title = event.data.title
+        this.detail = event.data.detail
+        this.category_id = event.data.category_id
+        this.language_id = event.data.language_id
+        this.color = event.data.color
+      },
       async getLearns() {
         let params = {}
         params.user_id = this.$store.state.user.user_id
@@ -188,6 +212,9 @@
         this.learns = response.data
 
         this.tab_f == 1
+
+        this.dialog1 = false
+        this.dialog2 = false
       },
 
       async getFollowLearns() {
@@ -201,6 +228,9 @@
         this.learns = response.data
 
         this.tab_f == 2
+
+        this.dialog1 = false
+        this.dialog2 = false
       },
 
       async getAllLearns() {
@@ -214,6 +244,9 @@
         this.learns = response.data
 
         this.tab_f == 3
+
+        this.dialog1 = false
+        this.dialog2 = false
       },
       async like(learn_id) {
         await this.axios.post('http://localhost:8888/api/like', {
