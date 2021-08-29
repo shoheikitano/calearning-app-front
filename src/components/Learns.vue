@@ -2,7 +2,7 @@
   <v-container>
     <h1 class="logo text-center">Learns</h1>
     <Showlearn @my-click='dialog1 = $event' :dialog1 = this.dialog1 :event = this.event :title = this.title :detail = this.detail :category_id = this.category_id :language_id = this.language_id :color = this.color />
-    <Comment @my-click='dialog2 = $event' :dialog2 = this.dialog2 :event = this.event :comment_content = this.comment_content />
+    <Comment @my-click='dialog2 = $event' :dialog2 = this.dialog2 :event = this.event :comment_id = this.comment_id :learn_id = this.learn_id :comment_content = this.comment_content />
     <v-form>
       <v-container>
         <v-row>
@@ -160,6 +160,7 @@
       language_id: '',
       color: '',
       comment_content: '',
+      comment_id: '',
       tab_f: 1,
     }),
     computed: {
@@ -188,6 +189,7 @@
       showComment(card) {
         this.dialog2 = true
         this.learn_id = card.learn_id
+        this.comment_id = card.comment_id
         this.comment_content = card.comment_content
       },
       async getLearn () {

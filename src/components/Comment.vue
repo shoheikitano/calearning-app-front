@@ -19,8 +19,8 @@
       </v-card-text>
       <v-card-actions>
         <v-container grid-list-md>
-          <v-btn v-if="this.event.comment_id == null" color="success" @click="insComment" dark>登録</v-btn>
-          <v-btn v-if="this.event.comment_id != null" color="error" @click="delComment" dark>削除</v-btn>
+          <v-btn v-if="this.comment_id == null" color="success" @click="insComment" dark>登録</v-btn>
+          <v-btn v-if="this.comment_id != null" color="error" @click="delComment" dark>削除</v-btn>
         </v-container>
       </v-card-actions>
     </v-card>
@@ -29,14 +29,14 @@
 
 <script>
 export default {
-  name: 'Showlearn',
-  props: ['event', 'dialog2', 'comment_content'],
+  name: 'Comment',
+  props: ['event', 'dialog2', 'comment_content', 'learn_id', 'comment_id'],
   data: () => ({
   }),
   methods: {
     async insComment() {
       await this.axios.post('http://localhost:8888/api/insComment', {
-        learn_id: this.event.learn_id,
+        learn_id: this.learn_id,
         user_id: this.$store.state.user.user_id,
         comment_content: this.comment_content,
       })
@@ -47,7 +47,7 @@ export default {
 
     async delComment() {
       await this.axios.post('http://localhost:8888/api/delComment', {
-        comment_id: this.event.comment_id,
+        comment_id: this.comment_id,
       })
         
       this.dialog2 = false

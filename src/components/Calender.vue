@@ -7,7 +7,7 @@
       Calearning
     </div>
     <h2>
-      {{ title }}
+      {{ title1 }}
     </h2>
     <Postlearn />
     <Showlearn @my-click='dialog1 = $event' :dialog1 = this.dialog1 :event = this.event :title = this.title :detail = this.detail :category_id = this.category_id :language_id = this.language_id :color = this.color />
@@ -143,7 +143,7 @@
       },
     },
     computed: {
-      title() {
+      title1() {
         return moment(this.value).format('yyyy年 M月');  // 表示用文字列を返す
       }
     },
