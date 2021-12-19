@@ -1,6 +1,8 @@
 <template>
   <v-container>
     <h1 class="logo text-center">Ranking</h1>
+    <Showlearn @my-click='dialog1 = $event' :dialog1 = this.dialog1 :event = this.event :title = this.title :detail = this.detail :category_id = this.category_id :language_id = this.language_id :color = this.color />
+    <Comment @my-click='dialog2 = $event' :dialog2 = this.dialog2 :event = this.event :comment_id = this.comment_id :learn_id = this.learn_id :comment_content = this.comment_content />
     <v-form>
       <v-container>
         <v-row>
@@ -15,9 +17,8 @@
               label="Search"
               type="text"
               @click:append="toggleMarker"
-              @click:append-outer="sendMessage"
+              @click:append-outer="getLearnsForRanking"
               @click:prepend="changeIcon"
-              @click:clear="clearMessage"
             ></v-text-field>
           </v-col>
         </v-row>
@@ -27,9 +28,9 @@
       color="deep-purple accent-4"
       right
     >
-      <v-tab>MINE</v-tab>
-      <v-tab>Friends</v-tab>
-      <v-tab>All</v-tab>
+      <v-tab @click="getLearnsForRanking">MINE</v-tab>
+      <v-tab @click="getFollowLearns">Friends</v-tab>
+      <v-tab @click="getAllLearns">All</v-tab>
 
       <v-tab-item
         v-for="n in 3"
@@ -38,9 +39,9 @@
       <v-container fluid>
         <v-row dense>
           <v-col
-            v-for="card in cards"
-            :key="card.title"
-            :cols="12"
+            v-for="card in learns"
+            :key="card.learn_id"
+            :cols="4"
           >
             <v-card
               class="mx-auto"
@@ -52,14 +53,14 @@
                 <v-icon
                   large
                   left
+                  @click="showEvent(card)"
                 >
-                  {{ card.icon }}
+                  {{ card.likes_count }}{{ card.title }}
                 </v-icon>
-                <span class="title font-weight-light">{{ card.title }}</span>
               </v-card-title>
 
               <v-card-text class="headline font-weight-bold">
-                {{ card.content }}
+                {{ card.detail }}
               </v-card-text>
 
               <v-card-actions>
@@ -73,23 +74,8 @@
                   </v-list-item-avatar>
 
                   <v-list-item-content>
-                    <v-list-item-title>{{ card.username }}</v-list-item-title>
+                    <v-list-item-title>{{ card.user_name }}</v-list-item-title>
                   </v-list-item-content>
-
-                  <v-row
-                    align="center"
-                    justify="end"
-                  >
-                    <v-icon class="mr-1">
-                      mdi-heart
-                    </v-icon>
-                    <span class="subheading mr-2">{{ card.like }}</span>
-                    <span class="mr-1">·</span>
-                    <v-icon class="mr-1">
-                      mdi-share-variant
-                    </v-icon>
-                    <span class="subheading">{{ card.share }}</span>
-                  </v-row>
                 </v-list-item>
               </v-card-actions>
             </v-card>
@@ -102,23 +88,23 @@
 </template>
 
 <script>
+  import Showlearn from "./Showlearn"
+  import Comment from "./Comment"
   export default {
     name: 'Ranking',
+    components: {
+      Showlearn,
+      Comment,
+    },
     data: () => ({
-      cards: [
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-        { title: 'Pre-fab homes', icon: 'mdi-twitter', content: 'アイウエオかきくけこ', username: 'kitanoshohei',like: '200',share: '40'},
-      ],
       password: 'Password',
       show: false,
-      message: 'Hey!',
+      message: '',
+      event: '',
       marker: true,
       iconIndex: 0,
+      dialog1: false,
+      dialog2: false,
       icons: [
         'mdi-emoticon',
         'mdi-emoticon-cool',
@@ -129,6 +115,15 @@
         'mdi-emoticon-sad',
         'mdi-emoticon-tongue',
       ],
+      learns: '',
+      title: '',
+      detail: '',
+      category_id: '',
+      language_id: '',
+      color: '',
+      comment_content: '',
+      comment_id: '',
+      tab_f: 1,
     }),
     computed: {
       icon () {
@@ -140,13 +135,6 @@
       toggleMarker () {
         this.marker = !this.marker
       },
-      sendMessage () {
-        this.resetIcon()
-        this.clearMessage()
-      },
-      clearMessage () {
-        this.message = ''
-      },
       resetIcon () {
         this.iconIndex = 0
       },
@@ -155,7 +143,79 @@
           ? this.iconIndex = 0
           : this.iconIndex++
       },
+      showEvent(card) {
+        this.dialog1 = true
+        this.learn_id = card.learn_id
+        this.getLearn()
+      },
+      showComment(card) {
+        this.dialog2 = true
+        this.learn_id = card.learn_id
+        this.comment_id = card.comment_id
+        this.comment_content = card.comment_content
+      },
+      async getLearn () {
+        let params = {}
+        params.learn_id = this.learn_id
+        let event = await this.axios.get('http://localhost:8888/api/getLearn',{ params })
+        this.event = event.data
+        this.title = event.data.title
+        this.detail = event.data.detail
+        this.category_id = event.data.category_id
+        this.language_id = event.data.language_id
+        this.color = event.data.color
+      },
+      async getLearnsForRanking() {
+        let params = {}
+        params.user_id = this.$store.state.user.user_id
+        params.message = this.message
+        let response = await this.axios.get('http://localhost:8888/api/learnsForRanking',{
+          params
+        })
+
+        this.learns = response.data
+
+        this.tab_f == 1
+
+        this.dialog1 = false
+        this.dialog2 = false
+      },
+
+      async getFollowLearns() {
+        let params = {}
+        params.user_id = this.$store.state.user.user_id
+        params.message = this.message
+        let response = await this.axios.get('http://localhost:8888/api/followlearns',{
+          params
+        })
+
+        this.learns = response.data
+
+        this.tab_f == 2
+
+        this.dialog1 = false
+        this.dialog2 = false
+      },
+
+      async getAllLearns() {
+        let params = {}
+        params.user_id = this.$store.state.user.user_id
+        params.message = this.message
+        let response = await this.axios.get('http://localhost:8888/api/alllearns',{
+          params
+        })
+
+        this.learns = response.data
+
+        this.tab_f == 3
+
+        this.dialog1 = false
+        this.dialog2 = false
+      },
     },
+    mounted() {
+      this.getLearnsForRanking()
+    }
   }
 </script>
 
